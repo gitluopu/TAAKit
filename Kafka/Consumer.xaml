@@ -1,0 +1,58 @@
+﻿<UserControl x:Class="Kafka.Consumer"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Kafka"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="broker" Width="60" Margin="5"></TextBlock>
+                <TextBox Text="{Binding broker_}"  Width="100" Margin="5"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="topic" Width="60" Margin="5"></TextBlock>
+                    <ComboBox Text="{Binding topic_}" ItemsSource="{Binding topicLi_}" IsEditable="True" Width="100" Margin="5"></ComboBox>
+                </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="cnt" Width="60" Margin="5"></TextBlock>
+                <TextBox Text="{Binding cntMax_}"  Width="100" Margin="5"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="groupId" Width="60" Margin="5"></TextBlock>
+                <TextBox Text="{Binding groupId_}"  Width="100" Margin="5"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="match" Width="60" Margin="5"></TextBlock>
+                <TextBox Text="{Binding match_}"  Width="100" Margin="5"></TextBox>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                    <CheckBox Content="regular" IsChecked="{Binding regular_}" Margin="5"></CheckBox>
+                <CheckBox Content="save2file" IsChecked="{Binding save2File_}" Margin="5"></CheckBox>
+            </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="consume" x:Name="btnConsume_" Click="OnConsumeClick" Width="80" Margin="5"></Button>
+                    <Button Content="stop"  x:Name="btnStop_" Click="OnStopClick" Width="80" Margin="5"></Button>
+                </StackPanel>
+                <StackPanel>
+                    <Button Content="clear"  x:Name="btnClear" Click="OnClearClick"  Margin="5"></Button>
+                </StackPanel>
+                <StackPanel>
+                    <Button Content="producer"  x:Name="btnProducer" Click="OnProducerClick"  Margin="5"></Button>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Vertical">
+                <TextBox x:Name="txtLog_" Height="365" Width="617" ></TextBox>
+                <StackPanel Orientation="Horizontal" Height="20" >
+                    <TextBlock Width="500"></TextBlock>
+                    <TextBlock Text="{Binding match_}" Width="56"></TextBlock>
+                    <TextBlock Text="/" Width="10"></TextBlock>
+                    <TextBlock Text="{Binding cnt_}" Width="50"></TextBlock>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>
