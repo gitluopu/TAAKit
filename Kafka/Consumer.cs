@@ -19,12 +19,17 @@ namespace Kafka
             if (conf_.AppSettings.Settings["topic"] == null)
                 conf_.AppSettings.Settings.Add("topic", "");
             topic_ = conf_.AppSettings.Settings["topic"].Value;
-            if (conf_.AppSettings.Settings["cnt"] == null)
-                conf_.AppSettings.Settings.Add("cnt", "");
-            cnt_ = conf_.AppSettings.Settings["cnt"].Value;
+            if (conf_.AppSettings.Settings["maxCnt"] == null)
+                conf_.AppSettings.Settings.Add("maxCnt", "");
+            cntMax_ = conf_.AppSettings.Settings["maxCnt"].Value;
             if (conf_.AppSettings.Settings["groupId"] == null)
                 conf_.AppSettings.Settings.Add("groupId", "");
             groupId_ = conf_.AppSettings.Settings["groupId"].Value;
+            if (conf_.AppSettings.Settings["logMaxLen"] == null)
+                conf_.AppSettings.Settings.Add("logMaxLen", "1000000"); //1M
+            logMaxLen_ = UInt64.Parse(conf_.AppSettings.Settings["logMaxLen"].Value);
+            match_ = String.Empty;
+            
         }
   
         public string GetConf(string key)
@@ -47,7 +52,7 @@ namespace Kafka
         {
             conf_.AppSettings.Settings["broker"].Value = broker_;
             conf_.AppSettings.Settings["topic"].Value = topic_;
-            conf_.AppSettings.Settings["cnt"].Value = cnt_;
+            conf_.AppSettings.Settings["maxCnt"].Value = cntMax_;
              conf_.AppSettings.Settings["groupId"].Value = groupId_;
             conf_.Save();
         }
@@ -82,16 +87,7 @@ namespace Kafka
                 OnPropertyChanged("cntMax_");
             }
         }
-        private string _cnt_;
-        public string cnt_
-        {
-            get { return _cnt_; }
-            set
-            {
-                _cnt_ = value;
-                OnPropertyChanged("cnt_");
-            }
-        }
+      
         private string _groupId_;
         public string groupId_
         {
@@ -102,22 +98,32 @@ namespace Kafka
                 OnPropertyChanged("groupId_");
             }
         }
-        private string _match_;
-        public string match_
+        private UInt64 _matchCnt_;
+        public UInt64 matchCnt_
         {
-            get { return _match_; }
+            get { return _matchCnt_; }
             set
             {
-                _match_ = value;
-                OnPropertyChanged("match_");
+                _matchCnt_ = value;
+                OnPropertyChanged("matchCnt_");
+            }
+        }
+        private UInt64 _totalCnt_;
+        public UInt64 totalCnt_
+        {
+            get { return _totalCnt_; }
+            set
+            {
+                _totalCnt_ = value;
+                OnPropertyChanged("totalCnt_");
             }
         }
         public List<string> topicLi_ { get; set; }
         public bool save2File_ { get; set; }
-        public string matchStr { get; set; }
+        public string match_ { get; set; }
         public bool regular_ { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
-
+        public UInt64 logMaxLen_;
         protected virtual void OnPropertyChanged(string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

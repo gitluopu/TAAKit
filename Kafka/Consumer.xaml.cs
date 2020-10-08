@@ -91,6 +91,8 @@ namespace Kafka
             topicLi_.Add("traffic");
             topicLi_.Add("event");
             topicLi_.Add("PushResponse");
+
+            ChangeStatusOnStop();
         }
          ~Consumer()
         {
@@ -99,7 +101,9 @@ namespace Kafka
         private void Write2Log(object sender, string e)
         {
             txtLog_.Dispatcher.Invoke(() => {
-                txtLog_.AppendText(e + System.Environment.NewLine);
+                UInt64 len = (UInt64)(txtLog_.Text.Length + e.Length);
+                if (len <= logMaxLen_)
+                    txtLog_.AppendText(e + System.Environment.NewLine);
             });
         }
         //it's called in consume thread
@@ -122,7 +126,6 @@ namespace Kafka
             tb.AutoWordSelection = true;
             tb.IsReadOnly = true;
             tb.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
-            tb.MaxLength = 10 * 1024 * 1024;
         }
         
         private bool Match(string msg)
@@ -132,20 +135,19 @@ namespace Kafka
                 return true;
             if(regular_)
             {
-                Regex rgx = new Regex(matchStr);
+                Regex rgx = new Regex(match_);
                 if(rgx.IsMatch(msg))
                     match = true;
             }else
             {
-                if(msg.Contains(matchStr))
+                if(msg.Contains(match_))
                     match = true;
             }
             return match;
         }
         private void OnConsumeClick(object sender, RoutedEventArgs arg)
         {
-            btnConsume_.IsEnabled = false;
-            btnStop_.IsEnabled = true;
+            ChangeStatusOnConsume();
             BrokerAddr addr = new BrokerAddr(broker_);
             try
             {
@@ -156,13 +158,14 @@ namespace Kafka
                 btnConsume_.IsEnabled = true;
                 btnStop_.IsEnabled = false;
                 MessageBox.Show(ex.Message);
+                ChangeStatusOnStop();
                 return;
             }
             Task.Run(() =>
             {
                 cts_ = new CancellationTokenSource();
-                match_ = 0.ToString();
-                cnt_ = 0.ToString();
+                matchCnt_ = 0;
+                totalCnt_ = 0;
                 string groupId = null;
                 if (groupId_ == "")
                     groupId = DateTime.Now.ToString();
@@ -201,7 +204,7 @@ namespace Kafka
                                 if(Match(msg))
                                 {
                                     MatchInc();
-
+                                    HandleMsg(msg);
                                 }
                                 if(CntIncThenContinue()==false)
                                 {
@@ -233,25 +236,20 @@ namespace Kafka
                     writer_.Close();
                     writer_ = null;
                 }
-                btnConsume_.Dispatcher.Invoke(() => { btnConsume_.IsEnabled = true; });
-                btnStop_.Dispatcher.Invoke(() => { btnStop_.IsEnabled = false; });
+                ChangeStatusOnStop();
             });
         }
         private void MatchInc()
         {
-            UInt64 match = UInt64.Parse(match_);
-            match++;
-            match_ = match.ToString();
+            matchCnt_++;
         }
         private bool CntIncThenContinue()
         {
             bool going = true;
             UInt64 cntMax = UInt64.Parse(cntMax_);
-            UInt64 cnt = UInt64.Parse(cnt_);
-            cnt++;
-            cnt_ = cnt.ToString();
+            totalCnt_++;
             if (cntMax > 0)
-                if (cnt > cntMax)
+                if (totalCnt_ > cntMax)
                     going = false;
             return going;
         }
@@ -280,11 +278,32 @@ namespace Kafka
                 txtLog_.Clear();
             });
         }
-        
+        private void ChangeStatus(bool b)
+        {
+            btnStop_.IsEnabled = !b;
+            btnConsume_.IsEnabled = b;
+            txtBroker_.IsEnabled = b;
+            txtTopic_.IsEnabled = b;
+            txtMaxCnt_.IsEnabled = b;
+            txtMatch_.IsEnabled = b;
+            chkRegular_.IsEnabled = b;
+            chkSave2File_.IsEnabled = b;
+            //txtLog_.IsEnabled = b;
+            
+        }
+
+        private void ChangeStatusOnConsume()
+        {
+            btnConsume_.Dispatcher.Invoke(() => { ChangeStatus(false); });
+        }
+        private void ChangeStatusOnStop()
+        {
+            btnConsume_.Dispatcher.Invoke(() => { ChangeStatus(true); });
+        }
         private CancellationTokenSource cts_;
         private StreamWriter writer_;
         public event EventHandler<string> OnConsumeMsg;
 
-        const string cacheDir_ = "TAAKit.run/";
+        const string cacheDir_ = "run/";
     }
 }

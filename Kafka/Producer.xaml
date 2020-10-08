@@ -10,27 +10,27 @@
         <StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="broker" Width="60" Margin="5"></TextBlock>
-                <TextBox Text="{Binding broker_}" Width="100" Margin="5"></TextBox>
+                <TextBox x:Name="txtBroker_" Text="{Binding broker_}" Width="100" Margin="5"></TextBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="topic" Width="60" Margin="5"></TextBlock>
-                <TextBox Text="{Binding topic_}" Width="100" Margin="5"></TextBox>
+                <TextBox x:Name="txtTopic_" Text="{Binding topic_}" Width="100" Margin="5"></TextBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="msg" Width="60" Margin="5"></TextBlock>
-                <TextBox Text="{Binding msg_}" Width="100" Margin="5"></TextBox>
+                <TextBox x:Name="txtMsg_" Text="{Binding msg_}" Width="100" Margin="5"></TextBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="cnt" Width="60" Margin="5"></TextBlock>
-                <TextBox Text="{Binding cnt_}" Width="100" Margin="5"></TextBox>
+                <TextBox x:Name="txtCnt_" Text="{Binding cnt_}" Width="100" Margin="5"></TextBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="interval" Width="60" Margin="5"></TextBlock>
-                <TextBox Text="{Binding interval_}" Width="100" Margin="5"></TextBox>
+                <TextBox x:Name="txtInterval_" Text="{Binding interval_}" Width="100" Margin="5"></TextBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Button Content="produce" x:Name="m_btnProduce" Click="OnProduceClick" Width="80" Margin="5"></Button>
-                <Button Content="stop" x:Name="m_btnStop" Click="OnStopClick" Width="80" Margin="5"></Button>
+                <Button Content="produce" x:Name="btnProduce_" Click="OnProduceClick" Width="80" Margin="5"></Button>
+                <Button Content="stop" x:Name="btnStop_" Click="OnStopClick" Width="80" Margin="5"></Button>
             </StackPanel>
         </StackPanel>
     </Grid>

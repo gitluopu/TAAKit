@@ -30,6 +30,7 @@ namespace Kafka
             msg_ = "hello,kafka";
             cnt_ = 3.ToString();
             interval_ = 1000.ToString();
+            ChangeStatusOnStop();
         }
         private void ShowSendMsgBox(object sender, string arg)
         {
@@ -37,8 +38,7 @@ namespace Kafka
         }
         private void OnProduceClick(object sender, RoutedEventArgs arg)
         {
-            m_btnProduce.IsEnabled = false;
-            m_btnStop.IsEnabled = true;
+            ChangeStatusOnProduce();
             int cntMax = int.Parse(cnt_);
             int interval = int.Parse(interval_);
             BrokerAddr addr = new BrokerAddr(broker_);
@@ -48,8 +48,7 @@ namespace Kafka
             }
             catch (Exception ex)
             {
-                m_btnProduce.IsEnabled = true;
-                m_btnStop.IsEnabled = false;
+                ChangeStatusOnStop();
                 MessageBox.Show(ex.Message);
                 return;
             }
@@ -95,15 +94,32 @@ namespace Kafka
                         retMsg += "," + ele;
                 }
                 OnProduceCompleted?.Invoke(this, retMsg);
+                ChangeStatusOnStop();
             });
-            m_btnProduce.IsEnabled = true;
-            m_btnStop.IsEnabled = false;
+            
         }
         private void OnStopClick(object sender, RoutedEventArgs arg)
         {
             m_cts.Cancel();
         }
-
+        private void ChangeStatus(bool b)
+        {
+            btnStop_.IsEnabled = !b;
+            btnProduce_.IsEnabled = b;
+            txtBroker_.IsEnabled = b;
+            txtTopic_.IsEnabled = b;
+            txtCnt_.IsEnabled = b;
+            txtInterval_.IsEnabled = b;
+            txtMsg_.IsEnabled = b;
+        }
+        private void ChangeStatusOnProduce()
+        {
+            btnProduce_.Dispatcher.Invoke(()=> { ChangeStatus(false); });
+        }
+        private void ChangeStatusOnStop()
+        {
+            btnProduce_.Dispatcher.Invoke(() => { ChangeStatus(true); });
+        }
         private CancellationTokenSource m_cts;
     }
 }

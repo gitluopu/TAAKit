@@ -9,19 +9,13 @@
         mc:Ignorable="d"
         Title="TAAKit" Height="450" Width="800">
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="123*"/>
-            <ColumnDefinition Width="17*"/>
-            <ColumnDefinition Width="58*"/>
-        </Grid.ColumnDefinitions>
-        <TabControl HorizontalAlignment="Left" Height="419" Width="792" VerticalAlignment="Top" Grid.ColumnSpan="3">
-            <TabItem Header="kafka" VerticalAlignment="Top" HorizontalAlignment="Left">
-                <DockPanel  Margin="0,0,0,0" LastChildFill="True">
-                    <Kafka:Consumer x:Name="consumer_"/>
-
-                </DockPanel>
+        <Viewbox  Stretch="Fill">
+        <TabControl>
+            <TabItem Header="kafka">
+                <Kafka:Consumer x:Name="consumer_" />
             </TabItem>
 
         </TabControl>
+        </Viewbox>
     </Grid>
 </Window>

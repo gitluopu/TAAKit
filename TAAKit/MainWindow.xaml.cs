@@ -23,7 +23,7 @@ namespace TAAKit
         public MainWindow()
         {
             InitializeComponent();
-            
+            DataContext = this;
         }
         
     }

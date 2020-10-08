@@ -8,31 +8,31 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <StackPanel Orientation="Horizontal">
-        <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Text="broker" Width="60" Margin="5"></TextBlock>
-                <TextBox Text="{Binding broker_}"  Width="100" Margin="5"></TextBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="topic" Width="60" Margin="5"></TextBlock>
-                    <ComboBox Text="{Binding topic_}" ItemsSource="{Binding topicLi_}" IsEditable="True" Width="100" Margin="5"></ComboBox>
+                    <TextBox Text="{Binding broker_}" x:Name="txtBroker_" Width="100" Margin="5"></TextBox>
                 </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="cnt" Width="60" Margin="5"></TextBlock>
-                <TextBox Text="{Binding cntMax_}"  Width="100" Margin="5"></TextBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="topic" Width="60" Margin="5"></TextBlock>
+                    <ComboBox Text="{Binding topic_}" x:Name="txtTopic_" ItemsSource="{Binding topicLi_}" IsEditable="True" Width="100" Margin="5"></ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="maxCnt" Width="60" Margin="5"></TextBlock>
+                    <TextBox Text="{Binding cntMax_}" x:Name="txtMaxCnt_" Width="100" Margin="5"></TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Text="groupId" Width="60" Margin="5"></TextBlock>
-                <TextBox Text="{Binding groupId_}"  Width="100" Margin="5"></TextBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
+                    <TextBox Text="{Binding groupId_}" x:Name="txtGroupId_" Width="100" Margin="5"></TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
                     <TextBlock Text="match" Width="60" Margin="5"></TextBlock>
-                <TextBox Text="{Binding match_}"  Width="100" Margin="5"></TextBox>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                    <CheckBox Content="regular" IsChecked="{Binding regular_}" Margin="5"></CheckBox>
-                <CheckBox Content="save2file" IsChecked="{Binding save2File_}" Margin="5"></CheckBox>
-            </StackPanel>
+                    <TextBox x:Name="txtMatch_" Text="{Binding match_}"  Width="100" Margin="5"></TextBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <CheckBox x:Name="chkRegular_" Content="regular" IsChecked="{Binding regular_}" Margin="5"></CheckBox>
+                    <CheckBox x:Name="chkSave2File_" Content="save2file" IsChecked="{Binding save2File_}" Margin="5"></CheckBox>
+                </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Button Content="consume" x:Name="btnConsume_" Click="OnConsumeClick" Width="80" Margin="5"></Button>
                     <Button Content="stop"  x:Name="btnStop_" Click="OnStopClick" Width="80" Margin="5"></Button>
@@ -45,12 +45,13 @@
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Vertical">
-                <TextBox x:Name="txtLog_" Height="365" Width="617" ></TextBox>
+                <TextBox x:Name="txtLog_" Height="365" Width="617" Margin="5,0,5,0"></TextBox>
                 <StackPanel Orientation="Horizontal" Height="20" >
                     <TextBlock Width="500"></TextBlock>
-                    <TextBlock Text="{Binding match_}" Width="56"></TextBlock>
-                    <TextBlock Text="/" Width="10"></TextBlock>
-                    <TextBlock Text="{Binding cnt_}" Width="50"></TextBlock>
+                    <TextBox Text="{Binding matchCnt_}" HorizontalContentAlignment="Center" Width="50" IsEnabled="False" BorderThickness="0"></TextBox>
+                    <TextBox Text="/" HorizontalContentAlignment="Center" Width="10" IsEnabled="False" BorderThickness="0"></TextBox>
+                    <TextBox Text="{Binding totalCnt_}" HorizontalContentAlignment="Center" Width="50" IsEnabled="False" BorderThickness="0"></TextBox>
+                   
                 </StackPanel>
             </StackPanel>
         </StackPanel>
