@@ -148,21 +148,18 @@ namespace Kafka
         private void OnConsumeClick(object sender, RoutedEventArgs arg)
         {
             ChangeStatusOnConsume();
-            BrokerAddr addr = new BrokerAddr(broker_);
-            try
-            {
-                Utils.TcpPortTest(addr.ip_, addr.port_,3000);
-            }
-            catch (Exception ex)
-            {
-                btnConsume_.IsEnabled = true;
-                btnStop_.IsEnabled = false;
-                MessageBox.Show(ex.Message);
-                ChangeStatusOnStop();
-                return;
-            }
             Task.Run(() =>
             {
+                BrokerAddr addr = new BrokerAddr(broker_);
+                try { 
+                Utils.TcpPortTest(addr.ip_, addr.port_, 3000);
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    ChangeStatusOnStop();
+                    return;
+                }
                 cts_ = new CancellationTokenSource();
                 matchCnt_ = 0;
                 totalCnt_ = 0;
@@ -262,9 +259,9 @@ namespace Kafka
 
         private void OnStopClick(object sender, RoutedEventArgs arg)
         {
-            cts_.Cancel();
-            btnConsume_.IsEnabled = true;
-            btnStop_.IsEnabled = false;
+            if(cts_!=null)
+               cts_.Cancel();
+            ChangeStatusOnStop();
         }
         private void OnProducerClick(object sender, RoutedEventArgs arg)
         {

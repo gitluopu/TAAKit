@@ -41,23 +41,24 @@ namespace Kafka
             ChangeStatusOnProduce();
             int cntMax = int.Parse(cnt_);
             int interval = int.Parse(interval_);
-            BrokerAddr addr = new BrokerAddr(broker_);
-            try
-            {
-                Utils.TcpPortTest(addr.ip_, addr.port_, 3000);
-            }
-            catch (Exception ex)
-            {
-                ChangeStatusOnStop();
-                MessageBox.Show(ex.Message);
-                return;
-            }
-            m_cts = new CancellationTokenSource();
+            
             Task.Run(() =>
             {
+                BrokerAddr addr = new BrokerAddr(broker_);
+                try
+                {
+                    Utils.TcpPortTest(addr.ip_, addr.port_, 3000);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                    ChangeStatusOnStop();
+                    return;
+                }
                 int okayCnt = 0;
                 int errCnt = 0;
                 int sendCnt = 0;
+                m_cts = new CancellationTokenSource();
                 HashSet<string> errSet = new HashSet<string>();
                 Action<DeliveryReport<Null, string>> handler = new Action<DeliveryReport<Null, string>>((r) =>
                 {
@@ -100,7 +101,9 @@ namespace Kafka
         }
         private void OnStopClick(object sender, RoutedEventArgs arg)
         {
-            m_cts.Cancel();
+            if(m_cts!=null)
+               m_cts.Cancel();
+            ChangeStatusOnStop();
         }
         private void ChangeStatus(bool b)
         {
